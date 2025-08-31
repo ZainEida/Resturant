@@ -143,9 +143,9 @@ export default function Home() {
         </header>
 
         {/* Main Content */}
-        <main className="space-y-8 mt-24 sm:mt-32 lg:mt-40">
+        <main className="space-y-8 mt-8 sm:mt-12">
           {/* Category Title */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 page-title text-white">
               {searchQuery.trim() ? "نتائج البحث" : categories.find((c) => c.id === activeCategory)?.title}
             </h2>
@@ -200,7 +200,7 @@ export default function Home() {
         </main>
 
         {/* Footer */}
-        <footer className="mt-16 pt-8 border-t border-gray-800 text-center">
+        <footer className="mt-8 pt-6 border-t border-gray-800 text-center">
           <p className="text-gray-400 text-sm">
             © 2024 Restaurant Store - جميع الحقوق محفوظة
           </p>
