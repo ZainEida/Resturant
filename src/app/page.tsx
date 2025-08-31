@@ -48,6 +48,8 @@ const items: MenuItem[] = [
   { id: "coffee", categoryId: "hot-drinks", title: "قهوة", priceTl: 25, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTc1bzJsrkkV3mNcqQ4QtIWHrghR8FxDemK7w&s", description: "قهوة تركية أصيلة" },
   { id: "nescafe", categoryId: "hot-drinks", title: "نسكافيه", priceTl: 20, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyJRoeZM6jlYdR060A1kYucUK__R77-3xzkw&s", description: "نسكافيه مع الحليب" },
   { id: "ice-coffee", categoryId: "hot-drinks", title: "آيس كوفي", priceTl: 30, photoUrl: "https://cdn.shopify.com/s/files/1/0642/0158/8951/files/e577860a00c021fbf86360f956588847_480x480.webp?v=1732791723", description: "قهوة باردة منعشة" },
+  { id: "tea", categoryId: "hot-drinks", title: "جاي", priceTl: 10, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRox3Qe3UnnoolsZTF8qNSr7N_-tmTU-OXS-g&s", description: "جاي ساخن" },
+
 ];
 
 export default function Home() {
