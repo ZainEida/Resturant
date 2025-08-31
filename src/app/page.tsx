@@ -115,7 +115,7 @@ export default function Home() {
               )}
               <div className="p-3 sm:p-6 flex items-center justify-between">
                 <h3 className="text-sm sm:text-lg font-semibold text-white">{it.title}</h3>
-                <span className="text-xs sm:text-base font-bold text-[#ff9900]">{it.priceTl} TL</span>
+                <span className="text-xs sm:text-base font-bold text-[#ff9900]">TL {it.priceTl}</span>
               </div>
             </article>
           ))}
