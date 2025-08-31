@@ -15,7 +15,6 @@ type MenuItem = {
   priceTl: number;
   photoUrl?: string; // empty until user provides
   description?: string; // optional description
-  popular?: boolean; // popular item flag
 };
 
 const categories: Category[] = [
@@ -28,25 +27,25 @@ const categories: Category[] = [
 
 const items: MenuItem[] = [
   // عصائر فرش
-  { id: "bolo-juice", categoryId: "fresh-juices", title: "عصير بولو", priceTl: 30, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX_PkFLuhlyIhF7T-4sNyoeGXLdWCZGGLZEA&s", description: "عصير طازج من الفواكه الطبيعية", popular: true },
+  { id: "bolo-juice", categoryId: "fresh-juices", title: "عصير بولو", priceTl: 30, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX_PkFLuhlyIhF7T-4sNyoeGXLdWCZGGLZEA&s", description: "عصير طازج من الفواكه الطبيعية" },
   { id: "pomegranate-juice", categoryId: "fresh-juices", title: "عصير رمان", priceTl: 20, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOX5PjWsj26ZiWTFkef_Y5HyLWobxZ0-YzEQ&s", description: "عصير رمان طبيعي 100%" },
   { id: "orange-juice", categoryId: "fresh-juices", title: "عصير برتقال", priceTl: 25, photoUrl: "https://zerolounge.link/wpconten/uploads/2023/12/%D8%A8%D8%B1%D8%AA%D9%82%D8%A7%D9%84-%D9%81%D8%B1%D9%8A%D8%B4-%D9%A2.%D9%A0%D9%A0%D9%A0.jpg", description: "عصير برتقال طازج يومياً" },
   // وجبات شاورما
-  { id: "shawarma-bill-meal", categoryId: "shawarma", title: "شاورما عربي وجبة دبل", priceTl: 160, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5bZGozmgE9959EAiR1bT706EeF24KuPrcZg&s", description: "وجبة كاملة مع البطاطس والمشروب", popular: true },
+  { id: "shawarma-bill-meal", categoryId: "shawarma", title: "شاورما عربي وجبة دبل", priceTl: 160, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5bZGozmgE9959EAiR1bT706EeF24KuPrcZg&s", description: "وجبة كاملة مع البطاطس والمشروب" },
   { id: "shawarma-regular-meal", categoryId: "shawarma", title: "شاورما عربي وجبة عادي", priceTl: 120, photoUrl: "https://goldenmeal.jo/Upload/Product/57f2badf-4402-4f4e-a815-d692a1f333e0.jpg", description: "وجبة عادية مع البطاطس" },
   { id: "shawarma-lafah-adi", categoryId: "shawarma", title: "شاورما عربي لفة عادي", priceTl: 60, photoUrl: "https://modo3.com/thumbs/fit630x300/160944/1493759099/%D8%B9%D9%85%D9%84_%D8%A7%D9%84%D8%B4%D8%A7%D9%88%D8%B1%D9%85%D8%A7_%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A.jpg", description: "لفة شاورما عربية تقليدية" },
   { id: "shawarma-lafah-bill", categoryId: "shawarma", title: "شاورما عربي لفة دبل", priceTl: 90, photoUrl: "https://images.deliveryhero.io/image/hungerstation/menuitem/image_url_ref/3cae3a1e78844607013f2ceb666b765a.jpeg?width=1440&quality=75&webp=true", description: "لفة دبل مع لحم إضافي" },
   // الأكلات السريعة
-  { id: "burger", categoryId: "fast-food", title: "همبرغر", priceTl: 200, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjQTvUkA1MWdg98x4cqJXOvLgdBt5Xlvx0qw&s", description: "برجر لحم طازج مع الخضار", popular: true },
+  { id: "burger", categoryId: "fast-food", title: "همبرغر", priceTl: 200, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjQTvUkA1MWdg98x4cqJXOvLgdBt5Xlvx0qw&s", description: "برجر لحم طازج مع الخضار" },
   { id: "pizza", categoryId: "fast-food", title: "بيتزا", priceTl: 140, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRM03UAWVodpyvAZvJ7CpbFaGhxjxQOWiczTg&s", description: "بيتزا إيطالية أصيلة" },
   { id: "crispy", categoryId: "fast-food", title: "كريسبي", priceTl: 200, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxH6nY0CxxL5uUy9CPo73h0Ez37rvibaUE5w&s", description: "دجاج مقرمش مع الصلصة" },
   { id: "kibbeh", categoryId: "fast-food", title: "كبة", priceTl: 100, photoUrl: "https://i.ytimg.com/vi/KcWN0JrZTX8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLB32aFDpztx5-UwYFqd0pfJ23gj4g", description: "كبة لبنانية تقليدية" },
   // حلويات
-  { id: "waffle", categoryId: "desserts", title: "وافل", priceTl: 60, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuNSP3TonX7UD-Or7PLYGEheAzdy_ZFiMNzQ&s", description: "وافل بلجيكي مع الشوكولاتة", popular: true },
+  { id: "waffle", categoryId: "desserts", title: "وافل", priceTl: 60, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuNSP3TonX7UD-Or7PLYGEheAzdy_ZFiMNzQ&s", description: "وافل بلجيكي مع الشوكولاتة" },
   { id: "cake", categoryId: "desserts", title: "كيك", priceTl: 80, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlJQjQRmCXK7MKp6FpBUQY0Bc2DvSAlBZrfA&s", description: "كيك شوكولاتة طازج" },
   { id: "pancake", categoryId: "desserts", title: "بان كيك", priceTl: 40, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRM3E41Mk-OB4f25Ak-s68vUJSxyHENiaViog&s", description: "بان كيك أمريكي مع القطر" },
   // مشروبات ساخنة
-  { id: "coffee", categoryId: "hot-drinks", title: "قهوة", priceTl: 25, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTc1bzJsrkkV3mNcqQ4QtIWHrghR8FxDemK7w&s", description: "قهوة تركية أصيلة", popular: true },
+  { id: "coffee", categoryId: "hot-drinks", title: "قهوة", priceTl: 25, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTc1bzJsrkkV3mNcqQ4QtIWHrghR8FxDemK7w&s", description: "قهوة تركية أصيلة" },
   { id: "nescafe", categoryId: "hot-drinks", title: "نسكافيه", priceTl: 20, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyJRoeZM6jlYdR060A1kYucUK__R77-3xzkw&s", description: "نسكافيه مع الحليب" },
   { id: "ice-coffee", categoryId: "hot-drinks", title: "آيس كوفي", priceTl: 30, photoUrl: "https://cdn.shopify.com/s/files/1/0642/0158/8951/files/e577860a00c021fbf86360f956588847_480x480.webp?v=1732791723", description: "قهوة باردة منعشة" },
 ];
@@ -76,9 +75,7 @@ export default function Home() {
     return filtered;
   }, [activeCategory, searchQuery]);
 
-  const popularItems = useMemo(() => {
-    return items.filter(item => item.popular).slice(0, 6);
-  }, []);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white page-transition" dir="rtl">
@@ -144,58 +141,14 @@ export default function Home() {
         {/* Main Content */}
         <main className="space-y-8">
           {/* Category Title */}
-          <div className="text-center">
-            <h2 className="text-3xl sm:text-5xl font-bold mb-4 page-title text-white">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 page-title text-white">
               {categories.find((c) => c.id === activeCategory)?.title}
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-orange-600 mx-auto rounded-full"></div>
+            <div className="w-16 h-1 bg-gradient-to-r from-orange-500 to-orange-600 mx-auto rounded-full"></div>
           </div>
 
-          {/* Popular Items Section (show when no search and on first category) */}
-          {!searchQuery && activeCategory === categories[0].id && (
-            <section className="mb-12">
-              <h3 className="text-2xl font-bold mb-6 text-center text-white">
-                الأكثر طلباً ⭐
-              </h3>
-              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
-                {popularItems.map((item) => (
-                  <article
-                    key={item.id}
-                    className="product-card group rounded-2xl shadow-xl overflow-hidden"
-                  >
-                    <div className="relative">
-                      {item.photoUrl ? (
-                        <img
-                          src={item.photoUrl}
-                          alt={item.title}
-                          className="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="aspect-[4/3] bg-gray-800 flex items-center justify-center text-gray-400 skeleton rounded-t-2xl">
-                          <span className="text-base">لا توجد صورة</span>
-                        </div>
-                      )}
-                      {item.popular && (
-                        <div className="absolute top-3 right-3 bg-orange-500 text-black px-3 py-1 rounded-full text-sm font-bold">
-                          ⭐ الأكثر طلباً
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                      {item.description && (
-                        <p className="text-gray-400 text-sm mb-4 line-clamp-2">{item.description}</p>
-                      )}
-                      <div className="flex items-center justify-center">
-                        <span className="text-2xl font-bold text-orange-500">TL {item.priceTl}</span>
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
-          )}
+
 
           {/* Products Grid */}
           <section className={`grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-7xl mx-auto ${isLoading ? 'opacity-50' : ''}`}>
@@ -219,11 +172,7 @@ export default function Home() {
                         <span className="text-base">لا توجد صورة</span>
                       </div>
                     )}
-                    {item.popular && (
-                      <div className="absolute top-3 right-3 bg-orange-500 text-black px-3 py-1 rounded-full text-sm font-bold">
-                        ⭐ الأكثر طلباً
-                      </div>
-                    )}
+
                   </div>
                   <div className="p-6">
                     <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
