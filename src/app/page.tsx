@@ -63,10 +63,14 @@ export default function Home() {
   }, [activeCategory]);
 
   const visibleItems = useMemo(() => {
-    let filtered = items.filter((it) => it.categoryId === activeCategory);
+    let filtered = items;
 
-    if (searchQuery.trim()) {
-      filtered = filtered.filter((item) =>
+    // If no search query, show only current category items
+    if (!searchQuery.trim()) {
+      filtered = items.filter((it) => it.categoryId === activeCategory);
+    } else {
+      // If searching, search across ALL categories
+      filtered = items.filter((item) =>
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description?.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -84,9 +88,9 @@ export default function Home() {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
       </div>
 
-      <div className="relative z-10 p-4 sm:p-6 lg:p-8 pt-16 sm:pt-20 lg:pt-24">
+      <div className="relative z-10 p-4 sm:p-6 lg:p-8 pt-24 sm:pt-32 lg:pt-40">
         {/* Header with Navigation and Logo */}
-        <header className="mb-12 sm:mb-16">
+        <header className="mb-16 sm:mb-20">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-8">
             {/* Restaurant Logo and Title */}
             <div className="logo-header flex items-center gap-4 w-full lg:w-auto justify-center lg:justify-start">
@@ -139,11 +143,11 @@ export default function Home() {
         </header>
 
         {/* Main Content */}
-        <main className="space-y-8 mt-8 sm:mt-12">
+        <main className="space-y-8 mt-12 sm:mt-16">
           {/* Category Title */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 page-title text-white">
-              {categories.find((c) => c.id === activeCategory)?.title}
+              {searchQuery.trim() ? "نتائج البحث" : categories.find((c) => c.id === activeCategory)?.title}
             </h2>
             <div className="w-16 h-1 bg-gradient-to-r from-orange-500 to-orange-600 mx-auto rounded-full"></div>
           </div>
