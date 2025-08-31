@@ -184,7 +184,7 @@ export default function Home() {
                       <p className="text-gray-400 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">{item.description}</p>
                     )}
                     <div className="flex items-center justify-center">
-                      <span className="text-lg sm:text-2xl font-bold text-orange-500">TL {item.priceTl}</span>
+                      <span className="text-lg sm:text-2xl font-bold text-orange-500">{item.priceTl} TL</span>
                     </div>
                   </div>
                 </article>
