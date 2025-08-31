@@ -1,6 +1,5 @@
 "use client";
 import { useMemo, useState, useEffect } from "react";
-import Cart from "./components/Cart";
 
 type Category = {
   id: string;
@@ -56,8 +55,6 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState<string>(categories[0].id);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [cartItems, setCartItems] = useState<Array<{ id: string; title: string; price: number; quantity: number; photoUrl?: string }>>([]);
-  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
   // Simulate loading when changing categories
   useEffect(() => {
@@ -82,43 +79,6 @@ export default function Home() {
   const popularItems = useMemo(() => {
     return items.filter(item => item.popular).slice(0, 6);
   }, []);
-
-  const addToCart = (item: MenuItem) => {
-    setCartItems(prev => {
-      const existingItem = prev.find(cartItem => cartItem.id === item.id);
-      if (existingItem) {
-        return prev.map(cartItem =>
-          cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
-        );
-      } else {
-        return [...prev, {
-          id: item.id,
-          title: item.title,
-          price: item.priceTl,
-          quantity: 1,
-          photoUrl: item.photoUrl
-        }];
-      }
-    });
-  };
-
-  const updateCartQuantity = (id: string, quantity: number) => {
-    if (quantity <= 0) {
-      setCartItems(prev => prev.filter(item => item.id !== id));
-    } else {
-      setCartItems(prev => prev.map(item =>
-        item.id === id ? { ...item, quantity } : item
-      ));
-    }
-  };
-
-  const removeFromCart = (id: string) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
-  };
-
-  const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white page-transition" dir="rtl">
@@ -146,9 +106,9 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Search Bar and Cart */}
-            <div className="w-full lg:w-auto flex gap-4">
-              <div className="relative flex-1 lg:w-80">
+            {/* Search Bar */}
+            <div className="w-full lg:w-80">
+              <div className="relative">
                 <input
                   type="text"
                   placeholder="البحث في القائمة..."
@@ -160,19 +120,6 @@ export default function Home() {
                   🔍
                 </div>
               </div>
-
-              {/* Cart Button */}
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="relative bg-orange-500 hover:bg-orange-600 text-black px-4 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105"
-              >
-                🛒
-                {cartItemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold">
-                    {cartItemCount}
-                  </span>
-                )}
-              </button>
             </div>
           </div>
 
@@ -240,14 +187,8 @@ export default function Home() {
                       {item.description && (
                         <p className="text-gray-400 text-sm mb-4 line-clamp-2">{item.description}</p>
                       )}
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-center">
                         <span className="text-2xl font-bold text-orange-500">TL {item.priceTl}</span>
-                        <button
-                          onClick={() => addToCart(item)}
-                          className="bg-orange-500 hover:bg-orange-600 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300 transform hover:scale-105"
-                        >
-                          إضافة للسلة
-                        </button>
                       </div>
                     </div>
                   </article>
@@ -289,11 +230,8 @@ export default function Home() {
                     {item.description && (
                       <p className="text-gray-400 text-sm mb-4 line-clamp-2">{item.description}</p>
                     )}
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-center">
                       <span className="text-2xl font-bold text-orange-500">TL {item.priceTl}</span>
-                      <button className="bg-orange-500 hover:bg-orange-600 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300">
-                        إضافة للسلة
-                      </button>
                     </div>
                   </div>
                 </article>
@@ -315,15 +253,6 @@ export default function Home() {
           </p>
         </footer>
       </div>
-
-      {/* Cart Modal */}
-      <Cart
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        items={cartItems}
-        onUpdateQuantity={updateCartQuantity}
-        onRemoveItem={removeFromCart}
-      />
     </div>
   );
 }
