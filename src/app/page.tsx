@@ -155,7 +155,7 @@ export default function Home() {
 
 
           {/* Products Grid */}
-          <section className={`grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-7xl mx-auto ${isLoading ? 'opacity-50' : ''}`}>
+          <section className={`grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-7xl mx-auto ${isLoading ? 'opacity-50' : ''}`}>
             {visibleItems.length > 0 ? (
               visibleItems.map((item, index) => (
                 <article
@@ -178,13 +178,13 @@ export default function Home() {
                     )}
 
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
+                  <div className="p-3 sm:p-6">
+                    <h3 className="text-sm sm:text-lg font-bold text-white mb-1 sm:mb-2">{item.title}</h3>
                     {item.description && (
-                      <p className="text-gray-400 text-sm mb-4 line-clamp-2">{item.description}</p>
+                      <p className="text-gray-400 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">{item.description}</p>
                     )}
                     <div className="flex items-center justify-center">
-                      <span className="text-2xl font-bold text-orange-500">TL {item.priceTl}</span>
+                      <span className="text-lg sm:text-2xl font-bold text-orange-500">TL {item.priceTl}</span>
                     </div>
                   </div>
                 </article>
