@@ -143,9 +143,9 @@ export default function Home() {
         </header>
 
         {/* Main Content */}
-        <main className="space-y-8 mt-8 sm:mt-12">
+        <main className="space-y-8 mt-4 sm:mt-6">
           {/* Category Title */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 page-title text-white">
               {searchQuery.trim() ? "نتائج البحث" : categories.find((c) => c.id === activeCategory)?.title}
             </h2>
