@@ -1,6 +1,5 @@
 "use client";
 import { useMemo, useState } from "react";
-import QRCodeGenerator from "./components/QRCodeGenerator";
 
 type Category = {
   id: string;
@@ -51,7 +50,6 @@ const items: MenuItem[] = [
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState<string>(categories[0].id);
-  const [showQRCode, setShowQRCode] = useState(false);
 
   const visibleItems = useMemo(
     () => items.filter((it) => it.categoryId === activeCategory),
@@ -68,7 +66,7 @@ export default function Home() {
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`category-button whitespace-nowrap px-3 py-2 sm:px-6 sm:py-3 text-sm sm:text-lg rounded-full transition-all duration-300 ${activeCategory === cat.id
+              className={`category-button whitespace-nowrap px-4 py-3 sm:px-6 sm:py-3 text-base sm:text-lg rounded-full transition-all duration-300 min-w-max ${activeCategory === cat.id
                 ? "active text-black"
                 : "text-white hover:bg-[#222222]"
                 }`}
@@ -123,41 +121,6 @@ export default function Home() {
           ))}
         </section>
       </div>
-
-      {/* QR Code Floating Button */}
-      <button
-        onClick={() => setShowQRCode(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-[#ff9900] hover:bg-[#e68a00] text-black rounded-full shadow-lg flex items-center justify-center transition-all duration-300 z-50"
-        title="Show QR Code"
-      >
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 11h6v6H3v-6zm2 2v2h2v-2H5zm8 2h6v6h-6v-6zm2 2v2h2v-2h-2z" />
-        </svg>
-      </button>
-
-      {/* QR Code Modal */}
-      {showQRCode && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-black">QR Code</h3>
-              <button
-                onClick={() => setShowQRCode(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <QRCodeGenerator
-              url={typeof window !== 'undefined' ? window.location.href : "https://your-restaurant-store.com"}
-              size={200}
-              className="mx-auto"
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }
