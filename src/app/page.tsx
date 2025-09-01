@@ -78,7 +78,7 @@ export default function Home() {
   // Fixed Cart functions
   const addToCart = (item: MenuItem, event: React.MouseEvent<HTMLButtonElement>) => {
     console.log('Adding to cart:', item.title); // Debug log only
-
+    
     const buttonRect = event.currentTarget.getBoundingClientRect();
     const cartButton = document.querySelector('[data-cart-button]') as HTMLElement;
 
