@@ -75,10 +75,9 @@ export default function Home() {
     if (!searchQuery.trim()) {
       filtered = items.filter((it) => it.categoryId === activeCategory);
     } else {
-      // If searching, search across ALL categories
+      // If searching, search only by item name (title) across ALL categories
       filtered = items.filter((item) =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.description?.toLowerCase().includes(searchQuery.toLowerCase())
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
