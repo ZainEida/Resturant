@@ -15,8 +15,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Restaurant Store",
   description: "قائمة مطعم",
-  themeColor: "#000000",
-  colorScheme: "dark",
 };
 
 export default function RootLayout({
@@ -25,14 +23,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" style={{ colorScheme: 'dark' }}>
+    <html lang="ar" dir="rtl">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{
-          backgroundColor: '#000000',
-          color: '#ffffff',
-          colorScheme: 'dark'
-        }}
       >
         {children}
       </body>

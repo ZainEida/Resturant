@@ -75,9 +75,10 @@ export default function Home() {
     if (!searchQuery.trim()) {
       filtered = items.filter((it) => it.categoryId === activeCategory);
     } else {
-      // If searching, search only by item name (title) across ALL categories
+      // If searching, search across ALL categories
       filtered = items.filter((item) =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.description?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -87,66 +88,7 @@ export default function Home() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white page-transition" dir="rtl" style={{ colorScheme: 'dark' }}>
-      {/* Force Dark Mode Styles */}
-      <style jsx global>{`
-        :root {
-          color-scheme: dark !important;
-        }
-        
-        * {
-          color-scheme: dark !important;
-          -webkit-color-scheme: dark !important;
-        }
-        
-        html {
-          background-color: #000000 !important;
-          color: #ffffff !important;
-          color-scheme: dark !important;
-          -webkit-color-scheme: dark !important;
-        }
-        
-        body {
-          background-color: #000000 !important;
-          color: #ffffff !important;
-          color-scheme: dark !important;
-          -webkit-color-scheme: dark !important;
-        }
-        
-        /* Force all elements to use dark theme */
-        div, span, p, h1, h2, h3, h4, h5, h6, input, button, nav, header, main, footer {
-          color-scheme: dark !important;
-          -webkit-color-scheme: dark !important;
-        }
-        
-        /* Override system preferences completely */
-        @media (prefers-color-scheme: light) {
-          html, body, * {
-            background-color: #000000 !important;
-            color: #ffffff !important;
-            color-scheme: dark !important;
-            -webkit-color-scheme: dark !important;
-          }
-        }
-        
-        @media (prefers-color-scheme: dark) {
-          html, body, * {
-            background-color: #000000 !important;
-            color: #ffffff !important;
-            color-scheme: dark !important;
-            -webkit-color-scheme: dark !important;
-          }
-        }
-        
-        /* Force dark mode for webkit browsers */
-        @media screen and (-webkit-min-device-pixel-ratio: 0) {
-          html, body, * {
-            color-scheme: dark !important;
-            -webkit-color-scheme: dark !important;
-          }
-        }
-      `}</style>
-
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white page-transition" dir="rtl">
       {/* Background Pattern */}
       <div className="fixed inset-0 opacity-5">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
@@ -249,9 +191,15 @@ export default function Home() {
                     {item.description && (
                       <p className="text-gray-400 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">{item.description}</p>
                     )}
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center mb-3">
                       <span className="text-lg sm:text-2xl font-bold text-orange-500" dir="ltr">{item.priceTl} TL</span>
                     </div>
+                    <button
+                      onClick={() => alert(`تم اختيار ${item.title} - ${item.priceTl} TL`)}
+                      className="w-full py-2 px-4 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-all duration-300 hover:scale-105"
+                    >
+                      اختيار
+                    </button>
                   </div>
                 </article>
               ))
