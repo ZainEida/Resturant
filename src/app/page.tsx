@@ -191,15 +191,9 @@ export default function Home() {
                     {item.description && (
                       <p className="text-gray-400 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">{item.description}</p>
                     )}
-                    <div className="flex items-center justify-center mb-3">
+                    <div className="flex items-center justify-center">
                       <span className="text-lg sm:text-2xl font-bold text-orange-500" dir="ltr">{item.priceTl} TL</span>
                     </div>
-                    <button
-                      onClick={() => alert(`تم اختيار ${item.title} - ${item.priceTl} TL`)}
-                      className="w-full py-2 px-4 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-all duration-300 hover:scale-105"
-                    >
-                      اختيار
-                    </button>
                   </div>
                 </article>
               ))
