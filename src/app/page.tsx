@@ -17,6 +17,14 @@ type MenuItem = {
   description?: string; // optional description
 };
 
+type CartItem = {
+  id: string;
+  title: string;
+  priceTl: number;
+  quantity: number;
+  photoUrl?: string;
+};
+
 const categories: Category[] = [
   { id: "fresh-juices", title: "عصائر فرش", icon: "🥤" },
   { id: "shawarma", title: "وجبات شاورما", icon: "🌯" },
@@ -56,6 +64,8 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState<string>(categories[0].id);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
   // Simulate loading when changing categories
   useEffect(() => {
@@ -63,6 +73,52 @@ export default function Home() {
     const timer = setTimeout(() => setIsLoading(false), 300);
     return () => clearTimeout(timer);
   }, [activeCategory]);
+
+  // Cart functions
+  const addToCart = (item: MenuItem) => {
+    setCart(prevCart => {
+      const existingItem = prevCart.find(cartItem => cartItem.id === item.id);
+      if (existingItem) {
+        return prevCart.map(cartItem =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      } else {
+        return [...prevCart, {
+          id: item.id,
+          title: item.title,
+          priceTl: item.priceTl,
+          quantity: 1,
+          photoUrl: item.photoUrl
+        }];
+      }
+    });
+  };
+
+  const removeFromCart = (itemId: string) => {
+    setCart(prevCart => prevCart.filter(item => item.id !== itemId));
+  };
+
+  const updateQuantity = (itemId: string, newQuantity: number) => {
+    if (newQuantity <= 0) {
+      removeFromCart(itemId);
+      return;
+    }
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.id === itemId ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+
+  const getTotalPrice = () => {
+    return cart.reduce((total, item) => total + (item.priceTl * item.quantity), 0);
+  };
+
+  const getTotalItems = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
+  };
 
   const visibleItems = useMemo(() => {
     let filtered = items;
@@ -109,20 +165,37 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Search Bar */}
-            <div className="w-full lg:w-80">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="البحث في القائمة..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
-                />
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  🔍
+            {/* Search Bar and Cart */}
+            <div className="flex gap-4 w-full lg:w-auto">
+              {/* Search Bar */}
+              <div className="flex-1 lg:w-80">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="البحث في القائمة..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full px-4 py-3 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
+                  />
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    🔍
+                  </div>
                 </div>
               </div>
+
+              {/* Cart Button */}
+              <button
+                onClick={() => setIsCartOpen(!isCartOpen)}
+                className="relative px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl transition-all duration-300 flex items-center gap-2 min-w-max"
+              >
+                <span className="text-lg">🛒</span>
+                <span className="hidden sm:inline">السلة</span>
+                {getTotalItems() > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold">
+                    {getTotalItems()}
+                  </span>
+                )}
+              </button>
             </div>
           </div>
 
@@ -143,6 +216,88 @@ export default function Home() {
             ))}
           </nav>
         </header>
+
+        {/* Cart Panel */}
+        {isCartOpen && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-gray-900 rounded-2xl shadow-2xl w-full max-w-md max-h-[80vh] overflow-hidden">
+              {/* Cart Header */}
+              <div className="p-6 border-b border-gray-700">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-bold text-white">السلة</h3>
+                  <button
+                    onClick={() => setIsCartOpen(false)}
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+
+              {/* Cart Items */}
+              <div className="p-6 max-h-96 overflow-y-auto">
+                {cart.length === 0 ? (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-4">🛒</div>
+                    <p className="text-gray-400">السلة فارغة</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {cart.map((item) => (
+                      <div key={item.id} className="flex items-center gap-4 p-3 bg-gray-800/50 rounded-xl">
+                        {item.photoUrl && (
+                          <img
+                            src={item.photoUrl}
+                            alt={item.title}
+                            className="w-12 h-12 object-cover rounded-lg"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <h4 className="text-white font-medium">{item.title}</h4>
+                          <p className="text-orange-500 text-sm" dir="ltr">{item.priceTl} TL</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="w-8 h-8 bg-gray-700 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors"
+                          >
+                            -
+                          </button>
+                          <span className="text-white font-medium w-8 text-center">{item.quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="w-8 h-8 bg-gray-700 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <button
+                          onClick={() => removeFromCart(item.id)}
+                          className="text-red-400 hover:text-red-300 transition-colors"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Cart Footer */}
+              {cart.length > 0 && (
+                <div className="p-6 border-t border-gray-700">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-white font-medium">المجموع:</span>
+                    <span className="text-orange-500 font-bold text-xl" dir="ltr">{getTotalPrice()} TL</span>
+                  </div>
+                  <button className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl transition-colors">
+                    طلب الطلبية
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Main Content */}
         <main className="space-y-8 mt-4 sm:mt-6">
@@ -185,9 +340,15 @@ export default function Home() {
                     {item.description && (
                       <p className="text-gray-400 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">{item.description}</p>
                     )}
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center mb-3">
                       <span className="text-lg sm:text-2xl font-bold text-orange-500" dir="ltr">{item.priceTl} TL</span>
                     </div>
+                    <button
+                      onClick={() => addToCart(item)}
+                      className="w-full py-2 px-4 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-all duration-300 hover:scale-105"
+                    >
+                      إضافة إلى السلة
+                    </button>
                   </div>
                 </article>
               ))
