@@ -78,51 +78,50 @@ export default function Home() {
 
   // Cart functions
   const addToCart = (item: MenuItem, event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('Adding to cart:', item.title); // Debug log
+    alert(`Adding ${item.title} to cart!`); // Temporary test alert
+
     const buttonRect = event.currentTarget.getBoundingClientRect();
     const cartButton = document.querySelector('[data-cart-button]') as HTMLElement;
 
-    if (cartButton) {
-      const cartRect = cartButton.getBoundingClientRect();
+    // Start animation (even if cart button not found)
+    setAnimatingItem({
+      id: item.id,
+      title: item.title,
+      photoUrl: item.photoUrl,
+      startX: buttonRect.left + buttonRect.width / 2,
+      startY: buttonRect.top + buttonRect.height / 2
+    });
 
-      // Start animation
-      setAnimatingItem({
-        id: item.id,
-        title: item.title,
-        photoUrl: item.photoUrl,
-        startX: buttonRect.left + buttonRect.width / 2,
-        startY: buttonRect.top + buttonRect.height / 2
+    // Add to cart after animation
+    setTimeout(() => {
+      setCart(prevCart => {
+        const existingItem = prevCart.find(cartItem => cartItem.id === item.id);
+        if (existingItem) {
+          return prevCart.map(cartItem =>
+            cartItem.id === item.id
+              ? { ...cartItem, quantity: cartItem.quantity + 1 }
+              : cartItem
+          );
+        } else {
+          return [...prevCart, {
+            id: item.id,
+            title: item.title,
+            priceTl: item.priceTl,
+            quantity: 1,
+            photoUrl: item.photoUrl
+          }];
+        }
       });
 
-      // Add to cart after animation
+      // Clear animation after adding to cart
       setTimeout(() => {
-        setCart(prevCart => {
-          const existingItem = prevCart.find(cartItem => cartItem.id === item.id);
-          if (existingItem) {
-            return prevCart.map(cartItem =>
-              cartItem.id === item.id
-                ? { ...cartItem, quantity: cartItem.quantity + 1 }
-                : cartItem
-            );
-          } else {
-            return [...prevCart, {
-              id: item.id,
-              title: item.title,
-              priceTl: item.priceTl,
-              quantity: 1,
-              photoUrl: item.photoUrl
-            }];
-          }
-        });
-
-        // Clear animation after adding to cart
-        setTimeout(() => {
-          setAnimatingItem(null);
-          // Trigger cart bounce animation
-          setCartBouncing(true);
-          setTimeout(() => setCartBouncing(false), 600);
-        }, 100);
-      }, 800); // Animation duration
-    }
+        setAnimatingItem(null);
+        // Trigger cart bounce animation
+        setCartBouncing(true);
+        setTimeout(() => setCartBouncing(false), 600);
+      }, 100);
+    }, 800); // Animation duration
   };
 
   const removeFromCart = (itemId: string) => {
