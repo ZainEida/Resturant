@@ -57,7 +57,6 @@ const items: MenuItem[] = [
   { id: "nescafe", categoryId: "hot-drinks", title: "نسكافيه", priceTl: 20, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyJRoeZM6jlYdR060A1kYucUK__R77-3xzkw&s", description: "نسكافيه مع الحليب" },
   { id: "ice-coffee", categoryId: "hot-drinks", title: "آيس كوفي", priceTl: 30, photoUrl: "https://cdn.shopify.com/s/files/1/0642/0158/8951/files/e577860a00c021fbf86360f956588847_480x480.webp?v=1732791723", description: "قهوة باردة منعشة" },
   { id: "tea", categoryId: "hot-drinks", title: "جاي", priceTl: 10, photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRox3Qe3UnnoolsZTF8qNSr7N_-tmTU-OXS-g&s", description: "جاي ساخن" },
-
 ];
 
 export default function Home() {
@@ -76,12 +75,14 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, [activeCategory]);
 
-  // Cart functions
+  // Fixed Cart functions
   const addToCart = (item: MenuItem, event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('Adding to cart:', item.title); // Debug log only
+
     const buttonRect = event.currentTarget.getBoundingClientRect();
     const cartButton = document.querySelector('[data-cart-button]') as HTMLElement;
 
-    // Add to cart immediately for responsive feel
+    // Update cart state immediately
     setCart(prevCart => {
       const existingItem = prevCart.find(cartItem => cartItem.id === item.id);
       if (existingItem) {
@@ -101,7 +102,7 @@ export default function Home() {
       }
     });
 
-    // Start animation for visual feedback
+    // Start animation
     setAnimatingItem({
       id: item.id,
       title: item.title,
@@ -114,7 +115,7 @@ export default function Home() {
     setCartBouncing(true);
     setTimeout(() => setCartBouncing(false), 600);
 
-    // Clear animation after it completes
+    // Clear animation after delay
     setTimeout(() => {
       setAnimatingItem(null);
     }, 800);
@@ -161,27 +162,86 @@ export default function Home() {
     return filtered;
   }, [activeCategory, searchQuery]);
 
-
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white page-transition" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white" dir="rtl">
       {/* Background Pattern */}
       <div className="fixed inset-0 opacity-5">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
       </div>
+
+      {/* Add custom styles */}
+      <style jsx>{`
+        @keyframes flyToCart {
+          0% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+          }
+          50% {
+            transform: translate(-50%, -200px) scale(0.8);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-200px, -300px) scale(0.3);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes bounce {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.1);
+          }
+        }
+        
+        .animate-cart-bounce {
+          animation: bounce 0.6s ease-in-out;
+        }
+        
+        .category-button {
+          background: rgba(31, 41, 55, 0.5);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .category-button.active {
+          background: linear-gradient(135deg, #f97316, #ea580c);
+          color: white;
+          border: 1px solid #f97316;
+        }
+        
+        .product-card {
+          background: rgba(31, 41, 55, 0.5);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(75, 85, 99, 0.3);
+          transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+          transform: translateY(-4px);
+          border-color: #f97316;
+          box-shadow: 0 20px 25px -5px rgba(249, 115, 22, 0.1);
+        }
+        
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
 
       <div className="relative z-10 p-4 sm:p-6 lg:p-8 pt-8 sm:pt-12 lg:pt-16">
         {/* Header with Navigation and Logo */}
         <header className="mb-8 sm:mb-12">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-8">
             {/* Restaurant Logo and Title */}
-            <div className="logo-header flex items-center gap-4 w-full lg:w-auto justify-center lg:justify-start">
-              <div className="logo-container w-16 h-16 lg:w-20 lg:h-20 flex items-center justify-center bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-lg">
-                <img
-                  src="/favicon.ico"
-                  alt="Restaurant Logo"
-                  className="w-12 h-12 lg:w-16 lg:h-16 object-contain"
-                />
+            <div className="flex items-center gap-4 w-full lg:w-auto justify-center lg:justify-start">
+              <div className="w-16 h-16 lg:w-20 lg:h-20 flex items-center justify-center bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-lg">
+                <span className="text-3xl lg:text-4xl">🍽️</span>
               </div>
               <div className="text-center lg:text-right">
                 <h1 className="text-2xl lg:text-4xl font-bold text-white mb-1">Restaurant Store</h1>
@@ -231,7 +291,7 @@ export default function Home() {
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
                 className={`category-button flex items-center gap-2 whitespace-nowrap px-6 py-4 text-base rounded-2xl transition-all duration-300 min-w-max ${activeCategory === cat.id
-                  ? "active text-black shadow-lg"
+                  ? "active text-white shadow-lg"
                   : "text-white hover:bg-gray-800/50 hover:scale-105"
                   }`}
               >
@@ -352,13 +412,11 @@ export default function Home() {
         <main className="space-y-8 mt-4 sm:mt-6">
           {/* Category Title */}
           <div className="text-center mb-6">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-6 page-title text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-white">
               {searchQuery.trim() ? "نتائج البحث" : categories.find((c) => c.id === activeCategory)?.title}
             </h2>
             <div className="w-16 h-1 bg-gradient-to-r from-orange-500 to-orange-600 mx-auto rounded-full"></div>
           </div>
-
-
 
           {/* Products Grid */}
           <section className={`grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-7xl mx-auto ${isLoading ? 'opacity-50' : ''}`}>
@@ -367,7 +425,6 @@ export default function Home() {
                 <article
                   key={item.id}
                   className="product-card group rounded-2xl shadow-xl overflow-hidden"
-                  style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="relative">
                     {item.photoUrl ? (
@@ -378,11 +435,10 @@ export default function Home() {
                         loading="lazy"
                       />
                     ) : (
-                      <div className="aspect-[4/3] bg-gray-800 flex items-center justify-center text-gray-400 skeleton rounded-t-2xl">
+                      <div className="aspect-[4/3] bg-gray-800 flex items-center justify-center text-gray-400 rounded-t-2xl">
                         <span className="text-base">لا توجد صورة</span>
                       </div>
                     )}
-
                   </div>
                   <div className="p-3 sm:p-6">
                     <h3 className="text-sm sm:text-lg font-bold text-white mb-1 sm:mb-2">{item.title}</h3>
@@ -394,7 +450,7 @@ export default function Home() {
                     </div>
                     <button
                       onClick={(e) => addToCart(item, e)}
-                      className="w-full py-2 px-4 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white text-sm font-medium rounded-lg transition-all duration-300 hover:scale-105"
+                      className="w-full py-2 px-4 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-all duration-300 hover:scale-105 active:scale-95"
                     >
                       إضافة إلى السلة
                     </button>
