@@ -151,6 +151,44 @@ body {
   }
 }
 
+@keyframes flyToCart {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+
+  30% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 0.9;
+  }
+
+  70% {
+    transform: translate(calc(-50% + 300px), calc(-50% - 150px)) scale(0.8);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translate(calc(-50% + 400px), calc(-50% - 200px)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes cartBounce {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.animate-cart-bounce {
+  animation: cartBounce 0.6s ease-in-out;
+}
+
 /* Logo header styling */
 .logo-header {
   animation: fadeInUp 1s ease-out;

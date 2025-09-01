@@ -66,6 +66,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  const [animatingItem, setAnimatingItem] = useState<{ id: string, title: string, photoUrl?: string, startX: number, startY: number } | null>(null);
+  const [cartBouncing, setCartBouncing] = useState<boolean>(false);
 
   // Simulate loading when changing categories
   useEffect(() => {
@@ -75,25 +77,52 @@ export default function Home() {
   }, [activeCategory]);
 
   // Cart functions
-  const addToCart = (item: MenuItem) => {
-    setCart(prevCart => {
-      const existingItem = prevCart.find(cartItem => cartItem.id === item.id);
-      if (existingItem) {
-        return prevCart.map(cartItem =>
-          cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
-        );
-      } else {
-        return [...prevCart, {
-          id: item.id,
-          title: item.title,
-          priceTl: item.priceTl,
-          quantity: 1,
-          photoUrl: item.photoUrl
-        }];
-      }
-    });
+  const addToCart = (item: MenuItem, event: React.MouseEvent<HTMLButtonElement>) => {
+    const buttonRect = event.currentTarget.getBoundingClientRect();
+    const cartButton = document.querySelector('[data-cart-button]') as HTMLElement;
+
+    if (cartButton) {
+      const cartRect = cartButton.getBoundingClientRect();
+
+      // Start animation
+      setAnimatingItem({
+        id: item.id,
+        title: item.title,
+        photoUrl: item.photoUrl,
+        startX: buttonRect.left + buttonRect.width / 2,
+        startY: buttonRect.top + buttonRect.height / 2
+      });
+
+      // Add to cart after animation
+      setTimeout(() => {
+        setCart(prevCart => {
+          const existingItem = prevCart.find(cartItem => cartItem.id === item.id);
+          if (existingItem) {
+            return prevCart.map(cartItem =>
+              cartItem.id === item.id
+                ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                : cartItem
+            );
+          } else {
+            return [...prevCart, {
+              id: item.id,
+              title: item.title,
+              priceTl: item.priceTl,
+              quantity: 1,
+              photoUrl: item.photoUrl
+            }];
+          }
+        });
+
+        // Clear animation after adding to cart
+        setTimeout(() => {
+          setAnimatingItem(null);
+          // Trigger cart bounce animation
+          setCartBouncing(true);
+          setTimeout(() => setCartBouncing(false), 600);
+        }, 100);
+      }, 800); // Animation duration
+    }
   };
 
   const removeFromCart = (itemId: string) => {
@@ -185,8 +214,9 @@ export default function Home() {
 
               {/* Cart Button */}
               <button
+                data-cart-button
                 onClick={() => setIsCartOpen(!isCartOpen)}
-                className="relative px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl transition-all duration-300 flex items-center gap-2 min-w-max"
+                className={`relative px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl transition-all duration-300 flex items-center gap-2 min-w-max ${cartBouncing ? 'animate-cart-bounce' : ''}`}
               >
                 <span className="text-lg">🛒</span>
                 <span className="hidden sm:inline">السلة</span>
@@ -299,6 +329,30 @@ export default function Home() {
           </div>
         )}
 
+        {/* Flying Animation */}
+        {animatingItem && (
+          <div className="fixed inset-0 pointer-events-none z-50">
+            <div
+              className="absolute bg-orange-500 text-white px-3 py-2 rounded-lg shadow-lg flex items-center gap-2"
+              style={{
+                left: animatingItem.startX,
+                top: animatingItem.startY,
+                transform: 'translate(-50%, -50%)',
+                animation: 'flyToCart 0.8s ease-in-out forwards'
+              }}
+            >
+              {animatingItem.photoUrl && (
+                <img
+                  src={animatingItem.photoUrl}
+                  alt={animatingItem.title}
+                  className="w-6 h-6 object-cover rounded"
+                />
+              )}
+              <span className="text-sm font-medium">{animatingItem.title}</span>
+            </div>
+          </div>
+        )}
+
         {/* Main Content */}
         <main className="space-y-8 mt-4 sm:mt-6">
           {/* Category Title */}
@@ -344,7 +398,7 @@ export default function Home() {
                       <span className="text-lg sm:text-2xl font-bold text-orange-500" dir="ltr">{item.priceTl} TL</span>
                     </div>
                     <button
-                      onClick={() => addToCart(item)}
+                      onClick={(e) => addToCart(item, e)}
                       className="w-full py-2 px-4 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-all duration-300 hover:scale-105"
                     >
                       إضافة إلى السلة
