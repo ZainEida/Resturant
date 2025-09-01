@@ -29,12 +29,47 @@
 }
 
 body {
-  background: var(--gradient-bg);
-  color: var(--foreground);
+  background: var(--gradient-bg) !important;
+  color: var(--foreground) !important;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   overflow-x: hidden;
   min-height: 100vh;
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
+}
+
+/* Force dark mode globally */
+html {
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Override system theme preferences */
+@media (prefers-color-scheme: light) {
+
+  html,
+  body,
+  * {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    color-scheme: dark !important;
+    -webkit-color-scheme: dark !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+
+  html,
+  body,
+  * {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    color-scheme: dark !important;
+    -webkit-color-scheme: dark !important;
+  }
 }
 
 /* Custom scrollbar */

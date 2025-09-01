@@ -90,32 +90,59 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white page-transition" dir="rtl" style={{ colorScheme: 'dark' }}>
       {/* Force Dark Mode Styles */}
       <style jsx global>{`
+        :root {
+          color-scheme: dark !important;
+        }
+        
         * {
           color-scheme: dark !important;
+          -webkit-color-scheme: dark !important;
         }
         
-        html, body {
+        html {
           background-color: #000000 !important;
           color: #ffffff !important;
-        }
-        
-        /* Force dark mode for all elements */
-        input, button, div, span, p, h1, h2, h3, h4, h5, h6 {
           color-scheme: dark !important;
+          -webkit-color-scheme: dark !important;
         }
         
-        /* Override any system theme colors */
+        body {
+          background-color: #000000 !important;
+          color: #ffffff !important;
+          color-scheme: dark !important;
+          -webkit-color-scheme: dark !important;
+        }
+        
+        /* Force all elements to use dark theme */
+        div, span, p, h1, h2, h3, h4, h5, h6, input, button, nav, header, main, footer {
+          color-scheme: dark !important;
+          -webkit-color-scheme: dark !important;
+        }
+        
+        /* Override system preferences completely */
         @media (prefers-color-scheme: light) {
-          * {
-            background-color: inherit !important;
-            color: inherit !important;
+          html, body, * {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            color-scheme: dark !important;
+            -webkit-color-scheme: dark !important;
           }
         }
         
         @media (prefers-color-scheme: dark) {
-          * {
-            background-color: inherit !important;
-            color: inherit !important;
+          html, body, * {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            color-scheme: dark !important;
+            -webkit-color-scheme: dark !important;
+          }
+        }
+        
+        /* Force dark mode for webkit browsers */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+          html, body, * {
+            color-scheme: dark !important;
+            -webkit-color-scheme: dark !important;
           }
         }
       `}</style>

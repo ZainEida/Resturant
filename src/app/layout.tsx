@@ -15,6 +15,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Restaurant Store",
   description: "قائمة مطعم",
+  themeColor: "#000000",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
